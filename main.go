@@ -30,6 +30,7 @@ var (
 	sqlTable    = goopt.String([]string{"-t", "--table"}, "", "Table to build struct from")
 
 	packageName = goopt.String([]string{"--package"}, "", "name to set for package")
+	modelName   = goopt.String([]string{"-m", "--model"}, "", "name to set for model")
 
 	jsonAnnotation = goopt.Flag([]string{"--json"}, []string{"--no-json"}, "Add json annotations (default)", "Disable json annotations")
 	gormAnnotation = goopt.Flag([]string{"--gorm"}, []string{}, "Add gorm annotations (tags)", "")
@@ -46,7 +47,7 @@ func init() {
 		return "ORM and RESTful API generator for Mysql"
 	}
 	goopt.Version = "0.1"
-	goopt.Summary = `gen [-v] --connstr "user:password@/dbname" --package pkgName --database databaseName --table tableName [--json] [--gorm] [--guregu]`
+	goopt.Summary = `gen [-v] --connstr "user:password@/dbname" --package pkgName --model modelName --database databaseName --table tableName [--json] [--gorm] [--guregu]`
 
 	//Parse options
 	goopt.Parse(nil)
@@ -87,7 +88,11 @@ func main() {
 	if packageName == nil || *packageName == "" {
 		*packageName = "generated"
 	}
-	os.Mkdir("model", 0777)
+
+	if modelName == nil || *modelName == "" {
+		*modelName = "model"
+	}
+	os.Mkdir(*modelName, 0777)
 
 	apiName := "api"
 	if *rest {
@@ -114,7 +119,7 @@ func main() {
 		structName = inflection.Singular(structName)
 		structNames = append(structNames, structName)
 
-		modelInfo := dbmeta.GenerateStruct(db, tableName, structName, "model", *jsonAnnotation, *gormAnnotation, *gureguTypes)
+		modelInfo := dbmeta.GenerateStruct(db, tableName, structName, *modelName, *jsonAnnotation, *gormAnnotation, *gureguTypes)
 
 		var buf bytes.Buffer
 		err = t.Execute(&buf, modelInfo)
@@ -127,12 +132,12 @@ func main() {
 			fmt.Println("Error in formating source: " + err.Error())
 			return
 		}
-		ioutil.WriteFile(filepath.Join("model", inflection.Singular(tableName)+".go"), data, 0777)
+		ioutil.WriteFile(filepath.Join(*modelName, inflection.Singular(tableName)+".go"), data, 0777)
 
 		if *rest {
 			//write api
 			buf.Reset()
-			err = ct.Execute(&buf, map[string]string{"PackageName": *packageName + "/model", "StructName": structName})
+			err = ct.Execute(&buf, map[string]string{"PackageName": *packageName + "/" + *modelName, "StructName": structName})
 			if err != nil {
 				fmt.Println("Error in rendering controller: " + err.Error())
 				return

@@ -6,7 +6,7 @@ import (
     "database/sql"
     "time"
 
-    "github.com/guregu/null"
+    "github.com/ivanszl/null"
 )
 
 var (
