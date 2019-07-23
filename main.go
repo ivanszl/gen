@@ -13,14 +13,14 @@ import (
 
 	_ "github.com/denisenkom/go-mssqldb"
 	"github.com/droundy/goopt"
+	"github.com/ivanszl/gen/dbmeta"
+	gtmpl "github.com/ivanszl/gen/template"
 	"github.com/jimsmart/schema"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/jinzhu/inflection"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/serenize/snaker"
-	"github.com/smallnest/gen/dbmeta"
-	gtmpl "github.com/smallnest/gen/template"
 )
 
 var (
