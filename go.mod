@@ -7,7 +7,7 @@ require (
 	github.com/droundy/goopt v0.0.0-20170604162106-0b8effe182da
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
 	github.com/go-sql-driver/mysql v1.4.1
-	github.com/guregu/null v3.4.0+incompatible
+	github.com/ivanszl/null v3.4.1+incompatible
 	github.com/jimsmart/schema v0.0.0-20181113191328-8d0563922e25
 	github.com/jinzhu/gorm v1.9.4
 	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a
